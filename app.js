@@ -196,8 +196,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const discountAmountInput = document.getElementById('discount-amount');
     const taxLabel = document.getElementById('tax-label');
 
-    let manualTax = false;
-
     function formatCurrency(amount) {
         return new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(amount);
     }
@@ -215,14 +213,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const discountAmount = parseFloat(discountAmountInput.value.replace(/[₦,]/g, '')) || 0;
         const subtotalAfterDiscount = subtotal - discountAmount;
         
-        let taxAmount;
-        if (manualTax) {
-            taxAmount = parseFloat(taxAmountInput.value.replace(/[₦,]/g, '')) || 0;
-        } else {
-            taxAmount = subtotalAfterDiscount * 0.075;
-            taxAmountInput.value = taxAmount.toFixed(2);
-        }
-        taxLabel.textContent = `Tax (7.5%)`;
+        const taxAmount = parseFloat(taxAmountInput.value.replace(/[₦,]/g, '')) || 0;
+        taxLabel.textContent = `Tax`;
 
         const grandTotal = subtotalAfterDiscount + taxAmount;
 
@@ -232,10 +224,7 @@ document.addEventListener('DOMContentLoaded', function () {
         grandTotalEl.textContent = formatCurrency(grandTotal);
     }
 
-    taxAmountInput.addEventListener('input', () => {
-        manualTax = true;
-        updateGrandTotals();
-    });
+    taxAmountInput.addEventListener('input', updateGrandTotals);
     discountAmountInput.addEventListener('input', updateGrandTotals);
 
     function calculateRowTotal(row) {
@@ -244,7 +233,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const totalSpan = row.querySelector('.total');
 
         const quantity = parseFloat(quantityInput.value) || 0;
-        const unitPrice = parseFloat(unitPriceInput.value) || 0;
+        const unitPrice = parseFloat(unitPriceInput.value.replace(/[₦,]/g, '')) || 0;
         const total = quantity * unitPrice;
         totalSpan.textContent = formatCurrency(total);
         updateGrandTotals();
@@ -255,7 +244,7 @@ document.addEventListener('DOMContentLoaded', function () {
         row.innerHTML = `
             <td><input type="text" class="form-control" placeholder="Item Description"></td>
             <td><input type="number" class="form-control quantity" placeholder="1" value="1"></td>
-            <td><input type="number" class="form-control unit-price" placeholder="0.00" value="0"></td>
+            <td><input type="text" class="form-control unit-price" placeholder="₦0.00" value="₦0.00"></td>
             <td><span class="total">${formatCurrency(0)}</span></td>
             <td><button class="btn btn-danger btn-sm remove-item-btn no-print">Remove</button></td>
         `;
@@ -331,11 +320,15 @@ document.addEventListener('DOMContentLoaded', function () {
         const date = new Date().toISOString().slice(0, 10);
         const filename = `Invoice-${clientName}-${date}.pdf`;
 
-        const inputs = invoice.querySelectorAll('input');
+        const inputs = invoice.querySelectorAll('input.form-control');
         const spans = [];
         inputs.forEach(input => {
             const span = document.createElement('span');
-            span.textContent = input.value;
+            if (input.classList.contains('unit-price')) {
+                span.textContent = formatCurrency(parseFloat(input.value.replace(/[₦,]/g, '')) || 0);
+            } else {
+                span.textContent = input.value;
+            }
             span.className = input.className;
             span.style.display = 'inline-block';
             input.parentNode.insertBefore(span, input);
