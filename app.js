@@ -47,6 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const vendorEmail = document.getElementById('vendor-email');
     const vendorTin = document.getElementById('vendor-tin');
     const vendorBank = document.getElementById('vendor-bank');
+    const displayVendorTin = document.getElementById('display-vendor-tin');
     const addVendorModal = new bootstrap.Modal(document.getElementById('addVendorModal'));
 
 
@@ -106,14 +107,14 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!vendor) return;
         vendorName.textContent = vendor.name;
         vendorAddress.textContent = vendor.address;
+        vendorPhone.textContent = vendor.phone;
+        vendorEmail.textContent = vendor.email;
+        displayVendorTin.textContent = vendor.tin;
 
         vendorContact.textContent = vendor.contactPerson ? `Attn: ${vendor.contactPerson}` : '';
-        vendorPhone.textContent = vendor.phone ? `Phone: ${vendor.phone}` : '';
-        vendorEmail.textContent = vendor.email ? `Email: ${vendor.email}` : '';
-        vendorTin.textContent = vendor.tin ? `TIN: ${vendor.tin}` : '';
         vendorBank.textContent = vendor.bankDetails ? `Bank: ${vendor.bankDetails}` : '';
 
-        [vendorContact, vendorPhone, vendorEmail, vendorTin, vendorBank].forEach(el => {
+        [vendorContact, vendorBank].forEach(el => {
             el.style.display = el.textContent ? 'block' : 'none';
         });
 

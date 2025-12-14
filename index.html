@@ -36,7 +36,27 @@
 
         /* Template Styles */
         .template-classic .invoice-header {
-            text-align: center;
+            text-align: left;
+            background-color: white;
+            color: black;
+            border-bottom: 5px solid var(--primary-blue);
+        }
+        .template-classic #vendor-logo {
+            border-radius: 50%;
+            object-fit: cover;
+            width: 100px;
+            height: 100px;
+        }
+        .template-classic h1 {
+            color: var(--primary-blue);
+        }
+        .template-classic #vendor-name {
+            font-size: 1.5rem;
+        }
+        .template-classic #vendor-address,
+        .template-classic #vendor-phone,
+        .template-classic #vendor-email {
+            margin-bottom: 0.25rem;
         }
         .template-classic {
             font-family: 'Times New Roman', Times, serif;
@@ -186,22 +206,30 @@
                     <div class="card-body p-5">
                         <div class="invoice-paper template-classic">
                             <div class="invoice-header">
-                                <img id="vendor-logo" src="" alt="Vendor Logo" style="max-height: 100px; margin-bottom: 1rem;">
-                                <h1>Invoice</h1>
-                                <div class="invoice-meta mt-2">
-                                    <p class="mb-0">Invoice #: <span id="display-invoice-number"></span></p>
-                                    <p class="mb-0">Date: <span id="display-invoice-date"></span></p>
-                                    <p class="mb-0">Contact: <span id="display-contact-person"></span></p>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <h1>Invoice</h1>
+                                        <p class="mb-0">Invoice #: <span id="display-invoice-number"></span></p>
+                                        <p class="mb-0">TIN: <span id="display-vendor-tin"></span></p>
+                                        <p class="mb-0">Date: <span id="display-invoice-date"></span></p>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <img id="vendor-logo" src="" alt="Vendor Logo" style="max-height: 100px; margin-bottom: 1rem;">
+                                        <p id="vendor-name" class="fw-bold"></p>
+                                        <p id="vendor-address"></p>
+                                        <p id="vendor-phone"></p>
+                                        <p id="vendor-email"></p>
+                                    </div>
                                 </div>
                             </div>
                             <!-- Invoice content will go here -->
-                            <div class="vendor-details mt-4">
-                                <h2 id="vendor-name"></h2>
-                                <p id="vendor-address"></p>
+                            <div class="vendor-details mt-4" style="display: none;">
+                                <h2 id="vendor-name-hidden"></h2>
+                                <p id="vendor-address-hidden"></p>
                                 <p id="vendor-contact"></p>
-                                <p id="vendor-phone"></p>
-                                <p id="vendor-email"></p>
-                                <p id="vendor-tin"></p>
+                                <p id="vendor-phone-hidden"></p>
+                                <p id="vendor-email-hidden"></p>
+                                <p id="vendor-tin-hidden"></p>
                                 <p id="vendor-bank"></p>
                             </div>
                             <div class="billed-to-details mt-4">
